@@ -22,7 +22,7 @@ build() {
   # -o cutieascii: nome do binário de saída
   # .: compila o pacote no diretório atual
   export CGO_ENABLED=0
-  go build -o cutieascii .
+  go build -trimpath -ldflags="-s -w" -o cutieascii .
 }
 
 # Função package(): instala os arquivos no sistema
