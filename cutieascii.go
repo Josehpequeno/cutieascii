@@ -36,6 +36,7 @@ func main() {
 		"kaoscii/allmojis",                             // Local development
 		"/usr/share/cutieascii/kaoscii/allmojis",       // System-wide installation
 		"/usr/local/share/cutieascii/kaoscii/allmojis", // Local installation
+		"./usr/share/cutieascii/kaoscii/allmojis",      // Build local
 	}
 
 	// Determine which file to use

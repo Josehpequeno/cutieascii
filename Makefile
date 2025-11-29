@@ -93,12 +93,27 @@ install-arch: arch-package
 	@echo "Package installation complete!"
 
 deb-package: build-linux
-	mkdir -p $(BUILD_DIR)/deb/DEBIAN
-	mkdir -p $(BUILD_DIR)/deb/usr/bin
-	mkdir -p $(BUILD_DIR)/deb/usr/share/cutieascii
+	@echo "Creating Debian package..."
+	@mkdir -p $(BUILD_DIR)/deb/DEBIAN
+	@mkdir -p $(BUILD_DIR)/deb/usr/bin
+	@mkdir -p $(BUILD_DIR)/deb/usr/share/cutieascii/kaoscii
+	
+	# Copiar binário
 	cp $(BUILD_DIR)/cutieascii-linux $(BUILD_DIR)/deb/usr/bin/cutieascii
-	cp -r kaoscii $(BUILD_DIR)/deb/usr/share/cutieascii/
-	# Create control file
+	chmod +x $(BUILD_DIR)/deb/usr/bin/cutieascii
+	
+	# Copiar arquivos de dados - VERIFICAR se o diretório kaoscii existe
+	@if [ -d "kaoscii" ]; then \
+		cp -r kaoscii/* $(BUILD_DIR)/deb/usr/share/cutieascii/kaoscii/; \
+		echo "Copied kaoscii files"; \
+	else \
+		echo "ERROR: kaoscii directory not found!"; \
+		echo "Current directory: $(PWD)"; \
+		ls -la; \
+		exit 1; \
+	fi
+	
+	# Criar arquivo de controle
 	@echo "Package: cutieascii" > $(BUILD_DIR)/deb/DEBIAN/control
 	@echo "Version: $(VERSION)" >> $(BUILD_DIR)/deb/DEBIAN/control
 	@echo "Section: utils" >> $(BUILD_DIR)/deb/DEBIAN/control
@@ -106,7 +121,11 @@ deb-package: build-linux
 	@echo "Architecture: amd64" >> $(BUILD_DIR)/deb/DEBIAN/control
 	@echo "Maintainer: Josehpequeno <hicarojbs21@gmail.com>" >> $(BUILD_DIR)/deb/DEBIAN/control
 	@echo "Description: Display random cute ASCII art emojis" >> $(BUILD_DIR)/deb/DEBIAN/control
-	dpkg-deb --build $(BUILD_DIR)/deb $(BUILD_DIR)/cutieascii_$(VERSION)_amd64.deb
+	@echo " A tool that displays cute ASCII art and emojis in the terminal." >> $(BUILD_DIR)/deb/DEBIAN/control
+	
+	# Construir pacote .deb
+	dpkg-deb --build $(BUILD_DIR)/deb cutieascii_$(VERSION)_amd64.deb
+	@echo "Package created: cutieascii_$(VERSION)_amd64.deb"
 
 # Comandos para AUR
 prepare-aur:
