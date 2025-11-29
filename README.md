@@ -55,6 +55,22 @@ makepkg -si
 yay -S cutieascii
 ```
 
+#### For Fedora/RHEL/CentOS
+```bash
+# Install from RPM package
+sudo dnf install https://github.com/Josehpequeno/cutieascii/releases/latest/download/cutieascii-0.1.0-1.x86_64.rpm
+
+# Or download and install manually
+wget https://github.com/Josehpequeno/cutieascii/releases/latest/download/cutieascii-0.1.0-1.x86_64.rpm
+sudo dnf install cutieascii-0.1.0-1.x86_64.rpm
+
+# Build from source (requires rpm-build and golang)
+git clone https://github.com/Josehpequeno/cutieascii.git
+cd cutieascii
+make rpm
+sudo dnf install rpmbuild/RPMS/x86_64/cutieascii-0.1.0-1.x86_64.rpm
+```
+
 #### For Debian/Ubuntu
 ```bash
 # Download the .deb package
@@ -84,7 +100,6 @@ cutieascii
 
 # Show version
 cutieascii -v
-
 ```
 
 ## Examples
@@ -116,6 +131,17 @@ go build -o cutieascii cutieascii.go
 make arch-package
 ```
 
+#### For Fedora/RHEL/CentOS
+```bash
+# Install build dependencies (Fedora/RHEL/CentOS)
+sudo dnf install rpm-build golang make
+
+# Build RPM package
+make rpm
+
+# The RPM will be in rpmbuild/RPMS/x86_64/
+```
+
 #### For Debian/Ubuntu
 ```bash
 # Build .deb package
@@ -125,7 +151,6 @@ make deb-package
 #### For General Linux (tarball)
 ```bash
 make build-linux
-./build-packages.sh
 ```
 
 ## Project Structure
@@ -137,14 +162,17 @@ cutieascii/
 │   └── allmojis          # ASCII emojis file
 ├── Makefile              # Build and installation
 ├── PKGBUILD             # Arch Linux package build
-├── debian/              # Debian/Ubuntu packaging files
-└── build-packages.sh    # Distribution script
+├── rpmbuild/            # RPM package build directory
+└── README.md            # This file
 ```
 
 ## Package Management
 
 ### Removing
 ```bash
+# Fedora/RHEL/CentOS
+sudo dnf remove cutieascii
+
 # Arch Linux
 sudo pacman -R cutieascii
 
@@ -153,6 +181,45 @@ sudo apt remove cutieascii
 
 # From source installation
 sudo make uninstall
+```
+
+## Troubleshooting (Fedora/RPM)
+
+If you encounter issues building the RPM:
+
+```bash
+# Ensure all dependencies are installed
+sudo dnf install rpm-build golang make
+
+# Rebuild RPM database (if needed)
+sudo rpm --rebuilddb
+
+# Clean previous builds
+make clean-all
+
+# Build again
+make rpm
+```
+
+## Development
+
+### Adding New Features
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with `make build && ./build/cutieascii`
+5. Submit a pull request
+
+### Testing Package Builds
+```bash
+# Test RPM build
+make rpm
+
+# Test DEB build  
+make deb-package
+
+# Test Arch package
+make arch-package
 ```
 
 ## Credits
@@ -167,3 +234,9 @@ MIT License - see LICENSE file for details.
 ---
 
 **Note**: This project is a wrapper/redistributor of the kaoscii emoji collection. Please support the original project!
+
+**Supported Distributions**: 
+- 🐧 Fedora/RHEL/CentOS (RPM)
+- 🐧 Arch Linux (AUR) 
+- 🐧 Debian/Ubuntu (DEB)
+- 🐧 Other Linux (source)

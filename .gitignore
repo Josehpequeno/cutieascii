@@ -34,3 +34,5 @@ pkg
 src
 build
 dist
+cutieascii-0.1.0
+rpmbuild
