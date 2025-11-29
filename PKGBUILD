@@ -21,6 +21,7 @@ build() {
   # Compila o programa Go
   # -o cutieascii: nome do binário de saída
   # .: compila o pacote no diretório atual
+  export CGO_ENABLED=0
   go build -o cutieascii .
 }
 
