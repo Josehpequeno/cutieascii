@@ -31,10 +31,23 @@ func main() {
 		os.Exit(0)
 	}
 
-	content, err := os.ReadFile("kaoscii/allmojis")
-	if err != nil {
-		fmt.Println("Error reading file:", err)
-		return
+	// Try multiple possible locations for the emojis file
+	possiblePaths := []string{
+		"kaoscii/allmojis",                             // Local development
+		"/usr/share/cutieascii/kaoscii/allmojis",       // System-wide installation
+		"/usr/local/share/cutieascii/kaoscii/allmojis", // Local installation
+	}
+
+	// Determine which file to use
+	var content []byte
+	var err error
+
+	// Try each possible path until one works
+	for _, path := range possiblePaths {
+		content, err = os.ReadFile(path)
+		if err == nil {
+			break
+		}
 	}
 
 	displayRandomEmoji(string(content))

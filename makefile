@@ -95,3 +95,66 @@ deb-package: build-linux
 	@echo "Maintainer: Josehpequeno <hicarojbs21@gmail.com>" >> $(BUILD_DIR)/deb/DEBIAN/control
 	@echo "Description: Display random cute ASCII art emojis" >> $(BUILD_DIR)/deb/DEBIAN/control
 	dpkg-deb --build $(BUILD_DIR)/deb $(BUILD_DIR)/cutieascii_$(VERSION)_amd64.deb
+
+# Comandos para AUR
+prepare-aur:
+	@echo "🚀 Preparando pacote para AUR..."
+	@chmod +x prepare-aur.sh
+	@./prepare-aur.sh
+
+# Atualizar AUR (após mudanças)
+update-aur: clean
+	@echo "🔄 Atualizando AUR..."
+	@mkdir -p cutieascii-$(VERSION)
+	@cp cutieascii.go cutieascii-$(VERSION)/
+	@cp -r kaoscii cutieascii-$(VERSION)/
+	@tar -czf cutieascii-$(VERSION).tar.gz cutieascii-$(VERSION)/
+	@rm -rf cutieascii-$(VERSION)
+	@if [ -d "aur" ]; then \
+		cp cutieascii-$(VERSION).tar.gz aur/; \
+		cd aur && makepkg --printsrcinfo > .SRCINFO; \
+		echo "✅ AUR atualizado localmente"; \
+		echo "💡 Agora faça:"; \
+		echo "   cd aur && git add . && git commit -m 'Update to v$(VERSION)' && git push"; \
+	else \
+		echo "❌ Diretório aur não encontrado. Execute 'make prepare-aur' primeiro"; \
+	fi
+
+# Limpar também arquivos AUR
+clean-aur:
+	rm -rf aur cutieascii-*.tar.gz
+
+clean-all: clean clean-aur
+
+# Comando para corrigir o AUR
+fix-aur:
+	@echo "🔧 Corrigindo problemas do AUR..."
+	@if [ ! -f "go.mod" ]; then \
+		echo "module github.com/Josehpequeno/cutieascii" > go.mod; \
+		echo "go 1.21" >> go.mod; \
+		echo "✅ go.mod criado"; \
+	fi
+	@echo "🎯 Agora execute:"
+	@echo "   git add go.mod"
+	@echo "   git commit -m 'Add go.mod'"
+	@echo "   git tag v0.1.0"
+	@echo "   git push origin main --tags"
+
+# Comando para atualizar o AUR após correções
+update-aur-fix: clean
+	@echo "🔄 Atualizando AUR com correções..."
+	@mkdir -p cutieascii-$(VERSION)
+	@cp cutieascii.go cutieascii-$(VERSION)/
+	@cp go.mod cutieascii-$(VERSION)/  # Inclui go.mod
+	@cp -r kaoscii cutieascii-$(VERSION)/
+	@tar -czf cutieascii-$(VERSION).tar.gz cutieascii-$(VERSION)/
+	@rm -rf cutieascii-$(VERSION)
+	@if [ -d "aur" ]; then \
+		cp cutieascii-$(VERSION).tar.gz aur/; \
+		cd aur && makepkg --printsrcinfo > .SRCINFO; \
+		echo "✅ AUR atualizado com go.mod"; \
+		echo "💡 Agora faça:"; \
+		echo "   cd aur && git add . && git commit -m 'Fix build with go.mod' && git push"; \
+	else \
+		echo "❌ Diretório aur não encontrado. Execute 'make prepare-aur' primeiro"; \
+	fi
