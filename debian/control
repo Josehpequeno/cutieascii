@@ -1,0 +1,14 @@
+Source: cutieascii
+Section: utils
+Priority: optional
+Maintainer: Josehpequeno <hicarojbs21@gmail.com>
+Build-Depends: debhelper (>= 11), golang-go
+Standards-Version: 4.5.0
+Homepage: https://github.com/Josehpequeno/cutieascii
+
+Package: cutieascii
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Display random cute ASCII art emojis
+ A simple program that displays random cute ASCII art emojis
+ from a collection file.
