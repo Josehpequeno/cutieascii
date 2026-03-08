@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-VERSION="0.1.1"
+VERSION="0.1.0"
 NAME="cutieascii"
 AUR_REPO="aur@aur.archlinux.org:${NAME}.git"
 

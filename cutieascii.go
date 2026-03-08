@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	"os"
 	"strings"
+	"time"
 )
 
 const (
@@ -55,6 +56,7 @@ func main() {
 }
 
 func displayRandomEmoji(content string) {
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	// divide content into separate emojis by double newlines
 	emojis := strings.Split(content, "\n\n")
 
@@ -72,10 +74,10 @@ func displayRandomEmoji(content string) {
 	}
 
 	// select a random emoji
-	randomIndex := rand.Intn(len(validEmojis))
+	randomIndex := r.Intn(len(validEmojis))
 
 	colors := []string{Yellow, Red, Green, Blue, Magenta, Cyan}
-	color := colors[rand.Intn(len(colors))]
+	color := colors[r.Intn(len(colors))]
 
 	fmt.Println(Bold + color + validEmojis[randomIndex])
 }
