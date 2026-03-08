@@ -115,7 +115,7 @@ cutieascii -v
 ## Building from Source
 
 ### Dependencies
-- Go 1.16 or higher
+- Go 1.23 or higher
 
 ### Steps
 ```bash
