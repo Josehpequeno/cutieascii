@@ -11,13 +11,17 @@ echo "🚀 Preparando pacote para AUR..."
 echo "📦 Criando tarball do código fonte..."
 mkdir -p ${NAME}-${VERSION}
 cp cutieascii.go ${NAME}-${VERSION}/
+
 if [ -f go.mod ]; then
     cp go.mod ${NAME}-${VERSION}/
 fi
+
 if [ -f go.sum ]; then
     cp go.sum ${NAME}-${VERSION}/
 fi
+
 cp -r kaoscii ${NAME}-${VERSION}/
+
 tar -czf ${NAME}-${VERSION}.tar.gz ${NAME}-${VERSION}
 rm -rf ${NAME}-${VERSION}
 
@@ -43,6 +47,9 @@ fi
 cp ../PKGBUILD ./
 cp ../${NAME}-${VERSION}.tar.gz ./
 
+# Atualizar checksums automaticamente
+echo "🔐 Atualizando checksums..."
+updpkgsums
 
 # Gerar .SRCINFO
 echo "📄 Gerando .SRCINFO..."
